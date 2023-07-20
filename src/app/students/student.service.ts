@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Student } from '../models/api-models/student.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,8 @@ export class StudentService {
   constructor(private hhtpClient:HttpClient) { }
     
   
-  getStudents(): Observable<any> {
-    return this.hhtpClient.get<any>(this.baseApiUrl+'/Students');
+  getStudents(): Observable<Student[]> {
+    return this.hhtpClient.get<Student[]>(this.baseApiUrl+'/Students');
   }
 
   

@@ -17,11 +17,12 @@ export class StudentsComponent {
   dataSource:MatTableDataSource<Student> = new MatTableDataSource<Student>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  filterString='';
 
   constructor(private studentService:StudentService) {}
 
   ngOnInit():void {
-    debugger;
+    // debugger;
     this.studentService.getStudents().subscribe(
       (success) => {
         this.students = success;
@@ -33,6 +34,10 @@ export class StudentsComponent {
 
       }
     )
+  }
+
+  filterStudents() {
+    this.dataSource.filter = this.filterString.trim().toLocaleLowerCase();
   }
 }
 

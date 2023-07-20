@@ -11,9 +11,10 @@ export class StudentsComponent {
   constructor(private studentService:StudentService) {}
 
   ngOnInit():void {
+    debugger;
     this.studentService.getStudents().subscribe(
       (success) => {
-
+        var guney = success[0].firstName
       },
       (err) => {
 
@@ -21,3 +22,12 @@ export class StudentsComponent {
     )
   }
 }
+
+
+// cors hatasında backende bunu yazdık:
+// builder.Services.AddCors(o => o.AddPolicy("MyPolicy",builder =>
+// {
+//   builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+// }));
+
+// app.UseCors("MyPolicy");

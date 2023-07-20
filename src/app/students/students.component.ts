@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { StudentService } from './student.service';
 import { Student } from '../models/ui-models/student.model';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-students',
@@ -13,7 +14,7 @@ export class StudentsComponent {
   students:Student[] = [];
   displayedColumns: string[] = ['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender'];
   dataSource:MatTableDataSource<Student> = new MatTableDataSource<Student>();
-  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   constructor(private studentService:StudentService) {}
 
   ngOnInit():void {
@@ -22,6 +23,7 @@ export class StudentsComponent {
       (success) => {
         this.students = success;
         this.dataSource = new MatTableDataSource<Student>(this.students);
+        this.dataSource.paginator = this.paginator;
       },
       (err) => {
 

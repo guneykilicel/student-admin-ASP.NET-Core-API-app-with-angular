@@ -1,0 +1,13 @@
+.p-1
+{
+  padding: 20px 0;
+}
+
+mat-form-field
+{
+  width: 100%;
+}
+
+::ng-deep .mat-snack-bar-container {
+    background-color: green; /* İstediğiniz yeşil rengi burada belirleyin */
+  }

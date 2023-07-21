@@ -4,7 +4,8 @@ import { StudentsComponent } from './students/students.component';
 import { ViewStudentComponent } from './students/view-student/view-student.component';
 
 const routes: Routes = [
-  {path:'',component:StudentsComponent},
+  {path:'', redirectTo:'students', pathMatch:'full'},
+  {path:'students',component:StudentsComponent},
   {path:'students/:id',component:ViewStudentComponent}
 ];
 

@@ -1,7 +1,7 @@
 
 <div class="page-header">
   <div class="container">
-      <h1>Öğrencileri Görüntüle</h1>
+      <h1>{{header}}</h1>
   </div>
 </div>
 
@@ -86,15 +86,32 @@
         </div>
         <div class="row">
             <div class="col-xs-12">
-               <div class="row between-xs">
+               <div class="row between-xs" *ngIf="!isNewStudent">
                 <button (click)="onUpdate()" mat-raised-button color="primary" >Kaydet</button>
                 <button (click)="onDelete()" mat-raised-button color="warn" >Sil</button>
+               </div>
+               <div class="row between-xs" *ngIf="isNewStudent">
+                <button (click)="onAdd()" mat-raised-button color="primary" >Kaydet</button>
                </div>
             </div>
         </div>
       </form>
     </div>
-    <div class="col-xs-6"></div>
+    <div class="col-xs-6">
+      <div class="row center-xs">
+        <div class="image-container">
+          <img [src]="displayProfileImageUrl">
+        </div>
+      </div>
+      <div>
+        <div class="row" *ngIf="!isNewStudent">
+          <div class="col-xs-12 center-xs mt-1">
+            <input hidden type="file" #imageUpload (change)="uploadImage($event)">
+            <button (click)="imageUpload.click()" mat-raised-button color="primary">Resmi Düzenle</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
 

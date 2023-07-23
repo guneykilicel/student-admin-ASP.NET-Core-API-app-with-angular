@@ -8,6 +8,18 @@ mat-form-field
   width: 100%;
 }
 
-::ng-deep .mat-snack-bar-container {
-    background-color: green; /* İstediğiniz yeşil rengi burada belirleyin */
-  }
+.image-container {
+  width: 200px;
+  height: 200px;
+  background-color: #F7f7f7;
+  border: 2px solid #CCC;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.image-container img {
+  width: 200px;
+}

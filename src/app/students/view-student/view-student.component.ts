@@ -14,7 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ViewStudentComponent {
 
   studentId: string | null | undefined;
-  student : Student = {
+  student: Student = {
     id: '',
     firstName: '',
     lastName: '',
@@ -34,52 +34,66 @@ export class ViewStudentComponent {
     }
   };
 
-  genderList:Gender[] = [];
+  genderList: Gender[] = [];
+  isNewStudent = false;
+  header = "";
+  displayProfileImageUrl = '';
 
-  constructor(private readonly studentService:StudentService,
-    private readonly genderService:GenderService,
-    private readonly route:ActivatedRoute,
-    private router:Router,
-    private snackbar:MatSnackBar
-    ) {}
+  constructor(private readonly studentService: StudentService,
+    private readonly genderService: GenderService,
+    private readonly route: ActivatedRoute,
+    private router: Router,
+    private snackbar: MatSnackBar
+  ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(
       (params) => {
         this.studentId = params.get('id');
-        this.studentService.getStudent(this.studentId).subscribe(
-          (success) => {
-            this.student = success;
-          },
-          (error) => {
-            
-          }
-        )
+        // studentId add ise eklemeye göre işlemler
+        if (this.studentId === "add") {
+          this.isNewStudent = true;
+          this.header = "Öğrenci Ekle";
+          this.setImage();
+        } else {
+          this.isNewStudent = false;
+          this.header = "Öğrenciyi Düzenle";
+          // değilse edite göre işlemler
+          this.studentService.getStudent(this.studentId).subscribe(
+            (success) => {
+              this.student = success;
+              this.setImage();
+            },
+            (error) => {
+              this.setImage();
+            }
+          )
+        }
         this.genderService.getGenderList().subscribe(
           (success) => {
             this.genderList = success;
           },
           (error) => {
-            
+
           }
         )
       }
-      
+
     )
   }
 
 
   onUpdate() {
-    this.studentService.updateStudent(this.student.id,this.student).subscribe(
+    this.studentService.updateStudent(this.student.id, this.student).subscribe(
       (success) => {
-        this.snackbar.open("Öğrenci başarıyla güncellendi.","Tamam", {
-          duration:1500
+        this.snackbar.open("Öğrenci başarıyla güncellendi.", "Tamam", {
+          duration: 1500
         })
         this.router.navigateByUrl('students');
       },
       (error) => {
-        this.snackbar.open("Öğrenci güncellenemedi!.","Tamam", {
-          duration:1500
+        this.snackbar.open("Öğrenci güncellenemedi!.", "Tamam", {
+          duration: 1500
         })
       }
     )
@@ -88,17 +102,62 @@ export class ViewStudentComponent {
   onDelete() {
     this.studentService.deleteStudent(this.student.id).subscribe(
       (success) => {
-        this.snackbar.open("Öğrenci başarıyla silindi.","Tamam", {
-          duration:1500
+        this.snackbar.open("Öğrenci başarıyla silindi.", "Tamam", {
+          duration: 1500
         })
         this.router.navigateByUrl('students');
       },
       (error) => {
-        this.snackbar.open("Öğrenci silinemedi!.","Tamam", {
-          duration:1500
+        this.snackbar.open("Öğrenci silinemedi!.", "Tamam", {
+          duration: 1500
         })
       }
     )
+  }
+
+  onAdd() {
+    this.studentService.addStudent(this.student).subscribe(
+      (success) => {
+        this.snackbar.open("Öğrenci başarıyla eklendi.", "Tamam", {
+          duration: 1500
+        })
+        this.router.navigateByUrl(`students/${success.id}`);
+      },
+      (error) => {
+        this.snackbar.open("Öğrenci eklenemedi!.", "Tamam", {
+          duration: 1500
+        })
+      }
+    )
+  }
+
+  setImage() {
+    debugger;
+    if(this.student.profileImageUrl) {
+      this.displayProfileImageUrl = this.studentService.getImagePath(this.student.profileImageUrl)
+    }
+    else {
+      this.displayProfileImageUrl = '/assets/user.png';
+    }
+  }
+
+  uploadImage(event:any) {
+    if(this.studentId) {
+      const file : File = event.target.files[0];
+      this.studentService.uploadImage(this.student.id,file).subscribe(
+        (success) => {
+          this.student.profileImageUrl = success;
+          this.setImage();
+
+          this.snackbar.open("Öğrenci resmi başarıyla güncellendi.", "Tamam")
+        },
+        (error) => {
+          this.snackbar.open("Öğrenci resmi güncellenemedi!.", "Tamam", {
+            duration: 1500
+          })
+        }
+      )
+    }
   }
 
 }
